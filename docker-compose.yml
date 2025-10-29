@@ -1,0 +1,15 @@
+services:
+  host:
+    image: couchbase:latest
+    container_name: host_cluster0
+    ports:
+      - "8091-8096:8091-8096"
+      - "11210-11211:11210-11211"
+    
+  node-one:
+    image: couchbase:latest
+    container_name: node-one_cluster0
+
+  node-two:
+    image: couchbase:latest
+    container_name: node-two_cluster0
