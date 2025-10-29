@@ -5,11 +5,64 @@ services:
     ports:
       - "8091-8096:8091-8096"
       - "11210-11211:11210-11211"
+    volumes:
+      - couchbase_host_data:/opt/couchbase/var
+      - couchbase_host_config:/opt/couchbase/var/lib/couchbase/config
+      - couchbase_host_logs:/opt/couchbase/var/lib/couchbase/logs
+    networks:
+      - couchbase-network
+    environment:
+      - CLUSTER_NAME=cluster0
     
   node-one:
     image: couchbase:latest
     container_name: node-one_cluster0
+    volumes:
+      - couchbase_node1_data:/opt/couchbase/var
+      - couchbase_node1_config:/opt/couchbase/var/lib/couchbase/config
+      - couchbase_node1_logs:/opt/couchbase/var/lib/couchbase/logs
+    networks:
+      - couchbase-network
+    depends_on:
+      - host
 
   node-two:
     image: couchbase:latest
     container_name: node-two_cluster0
+    volumes:
+      - couchbase_node2_data:/opt/couchbase/var
+      - couchbase_node2_config:/opt/couchbase/var/lib/couchbase/config
+      - couchbase_node2_logs:/opt/couchbase/var/lib/couchbase/logs
+    networks:
+      - couchbase-network
+    depends_on:
+      - host
+
+volumes:
+  # Host volumes
+  couchbase_host_data:
+    driver: local
+  couchbase_host_config:
+    driver: local
+  couchbase_host_logs:
+    driver: local
+  
+  # Node One volumes
+  couchbase_node1_data:
+    driver: local
+  couchbase_node1_config:
+    driver: local
+  couchbase_node1_logs:
+    driver: local
+  
+  # Node Two volumes
+  couchbase_node2_data:
+    driver: local
+  couchbase_node2_config:
+    driver: local
+  couchbase_node2_logs:
+    driver: local
+
+networks:
+  couchbase-network:
+    driver: bridge
